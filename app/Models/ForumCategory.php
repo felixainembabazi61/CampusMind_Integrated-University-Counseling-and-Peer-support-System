@@ -10,4 +10,10 @@ class ForumCategory extends Model
     public function forumPosts() {
     return $this->hasMany(ForumPost::class);
 }
+// app/Models/ForumCategory.php
+
+public function latestPost()
+{
+    return $this->hasOne(ForumPost::class)->latestOfMany();
+}
 }

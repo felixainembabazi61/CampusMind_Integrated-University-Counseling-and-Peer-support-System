@@ -4,24 +4,35 @@
 <div class="container-fluid">
     <div class="row" style="min-height: 80vh;">
         <!-- Left Sidebar: Categories -->
-        <div class="col-md-3 col-lg-2 bg-light border-end p-3">
-            <h5 class="mb-3">Categories</h5>
-            <div class="list-group">
-                <!-- "All" link to reset filter -->
-                <a href="{{ route('forum.index') }}" 
-                   class="list-group-item list-group-item-action {{ !$selectedCategory ? 'active' : '' }}">
-                    All Categories
-                </a>
-                @foreach($categories as $category)
-                    <a href="{{ route('forum.index', ['category' => $category->slug]) }}" 
-                       class="list-group-item list-group-item-action d-flex justify-content-between align-items-center 
-                              {{ $selectedCategory && $selectedCategory->id === $category->id ? 'active' : '' }}">
-                        {{ $category->name }}
-                        <span class="badge bg-secondary rounded-pill">{{ $category->forum_posts_count }}</span>
-                    </a>
-                @endforeach
+<div class="col-md-3 col-lg-2 bg-light border-end p-3">
+    <h5 class="mb-3">Categories</h5>
+    <div class="list-group">
+        <!-- "All" link -->
+        <a href="{{ route('forum.index') }}" 
+           class="list-group-item list-group-item-action {{ !$selectedCategory ? 'active' : '' }}">
+            <div class="d-flex w-100 justify-content-between">
+                <span>All Categories</span>
             </div>
-        </div>
+        </a>
+        @foreach($categories as $category)
+            <a href="{{ route('forum.index', ['category' => $category->slug]) }}" 
+               class="list-group-item list-group-item-action d-flex flex-column align-items-start 
+                      {{ $selectedCategory && $selectedCategory->id === $category->id ? 'active' : '' }}">
+                <div class="d-flex w-100 justify-content-between">
+                    <span>{{ $category->name }}</span>
+                    <span class="badge bg-secondary rounded-pill">{{ $category->forum_posts_count }}</span>
+                </div>
+                @if($category->latestPost)
+                    <small class="text-muted mt-1" style="font-size: 0.8rem;">
+                        {{ Str::limit($category->latestPost->title, 30) }}
+                    </small>
+                @else
+                    <small class="text-muted mt-1" style="font-size: 0.8rem;">No posts yet</small>
+                @endif
+            </a>
+        @endforeach
+    </div>
+</div>
 
         <!-- Right Main Content: Posts -->
         <div class="col-md-9 col-lg-10 p-4">

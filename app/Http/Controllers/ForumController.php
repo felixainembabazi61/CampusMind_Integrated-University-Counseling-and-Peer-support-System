@@ -10,7 +10,7 @@ class ForumController extends Controller
 {
     public function index(Request $request)
 {
-    $categories = ForumCategory::withCount('forumPosts')->get();
+    $categories = ForumCategory::with('latestPost')->withCount('forumPosts')->get();
 
     // Get the selected category slug from the query string (if any)
     $selectedSlug = $request->query('category');
