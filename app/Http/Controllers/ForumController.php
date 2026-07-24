@@ -8,25 +8,28 @@ use App\Models\ForumPost;
 
 class ForumController extends Controller
 {
-    public function index()
-    {
-        $categories = ForumCategory::with(['forumPosts' => function ($q) {
-            $q->visibleTo(auth()->user())->latest();
-        }])->get();
+    public function index(Request $request)
+{
+    $categories = ForumCategory::withCount('forumPosts')->get();
 
-        return view('forum.index', compact('categories'));
-    }
+    // Get the selected category slug from the query string (if any)
+    $selectedSlug = $request->query('category');
+    $selectedCategory = null;
 
-    public function show(ForumPost $post)
-    {
-        // Authorization: if private, only author/counselor/admin can view
-        if ($post->is_private) {
-            abort_if(!auth()->user() || 
-                (auth()->id() != $post->user_id && 
-                !auth()->user()->hasAnyRole(['counselor','admin'])), 403);
+    // Fetch posts – either filtered by category or all visible posts
+    $query = ForumPost::with('user', 'category')
+                ->visibleTo(auth()->user())
+                ->latest();
+
+    if ($selectedSlug) {
+        $selectedCategory = ForumCategory::where('slug', $selectedSlug)->first();
+        if ($selectedCategory) {
+            $query->where('forum_category_id', $selectedCategory->id);
         }
-
-        $post->load('comments.user', 'reactions');
-        return view('forum.show', compact('post'));
     }
+
+    $posts = $query->get();
+
+    return view('forum.index', compact('categories', 'posts', 'selectedCategory'));
+}
 }
