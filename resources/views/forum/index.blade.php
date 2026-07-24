@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row" style="min-height: 80vh;">
         <!-- Left Sidebar: Categories -->
-<div class="col-md-3 col-lg-2 bg-light border-end p-3">
+<div class="col-md-3 col-lg-2 border-end p-3" style="background-color: #e8f5e9;">
     <h5 class="mb-3">Categories</h5>
     <div class="list-group">
         <!-- "All" link -->
@@ -35,7 +35,7 @@
 </div>
 
         <!-- Right Main Content: Posts -->
-        <div class="col-md-9 col-lg-10 p-4">
+        <div class="col-md-9 col-lg-10 p-4" style="background-color: #fdf6e3;">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>
                     @if($selectedCategory)
