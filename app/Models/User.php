@@ -82,6 +82,16 @@ class User extends Authenticatable
         return $this->hasMany(Report::class, 'reporter_id');
     }
 
+    public function slots()
+    {
+        return $this->hasMany(Slot::class, 'counselor_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'user_id');
+    }
+
     // Helper: check if user has counselor role
     public function isCounselor()
     {
